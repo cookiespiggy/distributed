@@ -61,6 +61,11 @@ public class DistributedClientLock {
             }
         });
 
+        // 关于zk客户端连接失败的问题
+        while (ZooKeeper.States.CONNECTED != zk.getState()){
+            Thread.sleep(1000);
+        }
+
         // 1. 先注册一把锁到zk上 /locks/sub000000000000
         thisPath = zk.create("/" + groupNode + "/" + subNode ,null, ZooDefs.Ids.OPEN_ACL_UNSAFE,
                             CreateMode.EPHEMERAL_SEQUENTIAL);
